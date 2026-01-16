@@ -1,0 +1,5 @@
+﻿*.json
+*.key
+*.crt
+__pycache__/
+iot_project.tar.gz
