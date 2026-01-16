@@ -49,12 +49,27 @@ sudo chown -R mosquitto:mosquitto /etc/mosquitto/certs
 ### 3. Mosquitto Broker Configuration
 Modify /etc/mosquitto/mosquitto.conf to enable the secure listener:
 ```bash
-listener 8883
+# --- Persistence & Logging ---
+persistence true
+persistence_location /var/lib/mosquitto/
+log_dest file /var/log/mosquitto/mosquitto.log
+log_type all
+
+# --- Default Listener (Unencrypted) ---
+# Useful for local testing as per Lab Sheet 8
+listener 1883 0.0.0.0
+allow_anonymous true
+
+# --- Secure Listener (SSL/TLS) ---
+# Requires certificates in /etc/mosquitto/certs/
+listener 8883 0.0.0.0
 cafile /etc/mosquitto/certs/ca.crt
 certfile /etc/mosquitto/certs/server.crt
 keyfile /etc/mosquitto/certs/server.key
+
+# Set to false to allow clients to connect without their own certificate
 require_certificate false
-allow_anonymous true
+
 ```
 Restart the service:
 ```bash
